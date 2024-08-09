@@ -376,44 +376,6 @@ end
 //////////reading instructions one after another
 reg [2:0] count = 0;
 integer PC = 0;
-/*
-always@(posedge clk)
-begin
-  if(sys_rst)
-   begin
-     count <= 0;
-     PC    <= 0;
-   end
-   else 
-   begin
-     if(count < 4)
-     begin
-     count <= count + 1;
-     end
-     else
-     begin
-     count <= 0;
-     PC    <= PC + 1;
-     end
- end
-end
-*/
-////////////////////////////////////////////////////
-/////////reading instructions 
-/*
-always@(*)
-begin
-if(sys_rst == 1'b1)
-IR = 0;
-else
-begin
-IR = inst_mem[PC];
-decode_inst();
-decode_condflag();
-end
-end
-*/
-////////////////////////////////////////////////////
 ////////////////////////////////// fsm states
 parameter idle = 0, fetch_inst = 1, dec_exec_inst = 2, next_inst = 3, sense_halt = 4, delay_next_inst = 5;
 //////idle : check reset state
