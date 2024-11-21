@@ -8,14 +8,14 @@
 `define isrc      IR[15:0]
  
  
-////////////////arithmetic operation
+
 `define movsgpr        5'b00000
 `define mov            5'b00001
 `define add            5'b00010
 `define sub            5'b00011
 `define mul            5'b00100
  
-////////////////logical operations : and or xor xnor nand nor not
+
  
 `define ror            5'b00101
 `define rand           5'b00110
@@ -87,7 +87,7 @@ case(`oper_type)
 		GPR[`rdst] = SGPR;
 	end
  
-/////////////////////////////////
+
 	`mov : begin
 		if(`imm_mode)
 			GPR[`rdst]  = `isrc;
@@ -95,7 +95,7 @@ case(`oper_type)
 			GPR[`rdst]   = GPR[`rsrc1];
 	end
  
-////////////////////////////////////////////////////
+
  
 	`add : begin
 		if(`imm_mode)
@@ -104,7 +104,7 @@ case(`oper_type)
 			GPR[`rdst]   = GPR[`rsrc1] + GPR[`rsrc2];
 	end
  
-/////////////////////////////////////////////////////////
+
  
 	`sub : begin
 		if(`imm_mode)
@@ -112,8 +112,7 @@ case(`oper_type)
 		else
 			GPR[`rdst]   = GPR[`rsrc1] - GPR[`rsrc2];
 	end
- 
-/////////////////////////////////////////////////////////////
+
  
 	`mul : begin
 		if(`imm_mode)
@@ -125,7 +124,7 @@ case(`oper_type)
 		SGPR         =  mul_res[31:16];
 	end
  
-///////////////////////////////////////////////////////////// bitwise or
+
  
 	`ror : begin
 		if(`imm_mode)
@@ -134,7 +133,7 @@ case(`oper_type)
 			GPR[`rdst]   = GPR[`rsrc1] | GPR[`rsrc2];
 	end
  
-////////////////////////////////////////////////////////////bitwise and
+
  
 	`rand : begin
 		if(`imm_mode)
@@ -142,8 +141,7 @@ case(`oper_type)
 		else
 			GPR[`rdst]   = GPR[`rsrc1] & GPR[`rsrc2];
 	end
- 
-//////////////////////////////////////////////////////////// bitwise xor
+
  
 	`rxor : begin
 		if(`imm_mode)
@@ -152,7 +150,7 @@ case(`oper_type)
 			GPR[`rdst]   = GPR[`rsrc1] ^ GPR[`rsrc2];
 	end
  
-//////////////////////////////////////////////////////////// bitwise xnor
+
  
 	`rxnor : begin
 		if(`imm_mode)
@@ -161,7 +159,6 @@ case(`oper_type)
 			GPR[`rdst]   = GPR[`rsrc1] ~^ GPR[`rsrc2];
 	end
  
-//////////////////////////////////////////////////////////// bitwisw nand
  
 	`rnand : begin
 		if(`imm_mode)
@@ -170,7 +167,7 @@ case(`oper_type)
 			GPR[`rdst]   = ~(GPR[`rsrc1] & GPR[`rsrc2]);
 	end
  
-////////////////////////////////////////////////////////////bitwise nor
+
  
 	`rnor : begin
 		if(`imm_mode)
@@ -178,8 +175,7 @@ case(`oper_type)
 		else
 			GPR[`rdst]   = ~(GPR[`rsrc1] | GPR[`rsrc2]);
 	end
- 
-////////////////////////////////////////////////////////////not
+
  
 	`rnot : begin
 		if(`imm_mode)
@@ -188,32 +184,29 @@ case(`oper_type)
 			GPR[`rdst]   = ~(GPR[`rsrc1]);
 	end
  
-////////////////////////////////////////////////////////////
+
  
 	`storedin: begin
 		data_mem[`isrc] = din;
 	end
  
-/////////////////////////////////////////////////////////////
+
  
 	`storereg: begin
 		data_mem[`isrc] = GPR[`rsrc1];
 	end
  
-/////////////////////////////////////////////////////////////
  
  
 	`senddout: begin
 		dout  = data_mem[`isrc]; 
 	end
  
-/////////////////////////////////////////////////////////////
  
 	`sendreg: begin
 		GPR[`rdst] =  data_mem[`isrc];
 	end
  
-/////////////////////////////////////////////////////////////
  
 	`jump: begin
 		jmp_flag = 1'b1;
@@ -277,7 +270,6 @@ case(`oper_type)
 			jmp_flag = 1'b0; 
 	end
  
-////////////////////////////////////////////////////////////
 	`halt : begin
 		stop = 1'b1;
 	end
@@ -287,21 +279,17 @@ endcase
 end
 endtask
  
- 
- 
-///////////////////////logic for condition flag
+
  
  
 task decode_condflag();
 begin
  
-	/////////////////sign bit
 	if(`oper_type == `mul)
 	  sign = SGPR[15];
 	else
 	  sign = GPR[`rdst][15];
  
-////////////////carry bit
  
 	if(`oper_type == `add)
 	   begin
@@ -320,16 +308,13 @@ begin
 			carry  = 1'b0;
 		end
 	 
-	 
-///////////////////// zero bit
- 
+
 	if(`oper_type == `mul)
         zero =  ~((|SGPR[15:0]) | (|GPR[`rdst]));
     else
         zero =  ~(|GPR[`rdst]);  
  
- 
-//////////////////////overflow bit
+
  
 	if(`oper_type == `add)
 		 begin
@@ -368,9 +353,7 @@ parameter idle = 0, fetch_inst = 1, dec_exec_inst = 2, next_inst = 3, sense_halt
 
 reg [2:0] state = idle, next_state = idle;
 
-////////////////////////////////// fsm states
- 
-///////////////////reset decoder
+
 always@(posedge clk)
 begin
 	if(sys_rst)
@@ -379,8 +362,7 @@ begin
 		state <= next_state; 
 end
  
- 
-//////////////////next state decoder + output decoder
+
  
 always@(*)
 begin
@@ -439,8 +421,7 @@ begin
 endcase 
 end
  
- 
-// count update 
+
  
 always@(posedge clk)
 begin
