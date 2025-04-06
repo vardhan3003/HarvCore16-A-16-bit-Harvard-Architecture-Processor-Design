@@ -302,7 +302,8 @@ begin
 			 begin
 			 temp_sum = GPR[`rsrc1] + GPR[`rsrc2];
 			 carry    = temp_sum[16]; 
-			 end   end
+			 end   
+	   end
 	   else
 		begin
 			carry  = 1'b0;
